@@ -4,6 +4,8 @@ var helpers = require(WPATH("helpers"));
 
 var tabBackgroundColor;
 
+var subWins = [];
+
 $.tab.backgroundSelectedColor = args.backgroundSelectedColor || "#fff";
 
 if (args.view) {
@@ -56,6 +58,10 @@ function setActive() {
 			args.win.__navGroup.show();
 		}
 
+		subWins.forEach(function(win) {
+			win.show();
+		});
+
 	}
 }
 
@@ -83,24 +89,85 @@ function setInactive() {
 			args.win.__navGroup.hide();
 		}
 
+		subWins.forEach(function(win) {
+			win.hide();
+		});
+
 	}
 }
 
 function open(subWindow) {
 
 	if (OS_IOS) {
-		args.win.__navGroup.open(subWindow);
-	} else {
 
-		subWindow.modal = subWindow.modal || false;
+		args.win.__navGroup.open(subWindow);
+
+	} else if (OS_ANDROID) {
+
+		if (args.settings.heavyWeightMode) {
+			subWindow.modal = subWindow.modal || false;
+		} else {
+
+			if (args.settings.tabsAtBottom) {
+				subWindow.applyProperties({
+					top : 0,
+					bottom : args.settings.tabHeight
+				});
+			} else {
+				subWindow.applyProperties({
+					top : args.settings.tabHeight,
+					bottom : 0
+				});
+			}
+
+			if (!subWindow.leftNavButton) {
+				subWindow.leftNavButton = Ti.UI.createButton({
+					height : 38,
+					title : "back"
+				});
+			}
+
+			subWindow.leftNavButton.applyProperties({
+				top : subWindow.leftNavButton.top || 5,
+				left : subWindow.leftNavButton.left || 5,
+				height: subWindow.leftNavButton.height || 38,
+				width: subWindow.leftNavButton.width || 75
+			});
+
+			subWindow.leftNavButton.addEventListener("click", function() {
+				close(subWindow);
+			});
+
+			subWindow.add(subWindow.leftNavButton);
+
+			subWins.push(subWindow);
+
+		}
+
 		subWindow.open();
 
+	} else {
+		subWindow.open();
 	}
 }
 
 function close(subWindow) {
 	if (OS_IOS) {
+
 		args.win.__navGroup.close(subWindow);
+
+	} else if (OS_ANDROID) {
+
+		if (!args.settings.heavyWeightMode) {
+
+			subWins.pop();
+
+		}
+
+		subWindow.close();
+
+		subWindow = null;		
+
 	} else {
 
 		subWindow.close();

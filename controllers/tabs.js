@@ -9,7 +9,8 @@ var settings = {
 	tabHeight : OS_IOS ? 49 : 69,
 	tabsAtBottom : true,
 	tabGroup : {},
-	tabs : {}
+	tabs : {},
+	heavyWeightMode : false
 };
 
 // initialise the tabGroup Window
@@ -50,7 +51,8 @@ function addTab(props) {
 		font : props.font || settings.tabs.font,
 		selectedFont : props.selectedFont || settings.tabs.selectedFont,
 		selectedColor : props.selectedColor || settings.tabs.selectedColor,
-		color : props.color || settings.tabs.color
+		color : props.color || settings.tabs.color,
+		settings : settings	
 
 	}, props);
 
@@ -69,10 +71,18 @@ function addTab(props) {
 		tab.win = props.win;
 
 		if (!settings.tabsAtBottom) {
-			tab.win.top = settings.tabHeight;
+			tab.win.applyProperties({
+				top : settings.tabHeight,
+				bottom : 0
+			});
+			//tab.win.top = settings.tabHeight;
 
 		} else {
-			tab.win.bottom = settings.tabHeight;
+			tab.win.applyProperties({
+				top : 0,
+				bottom : settings.tabHeight
+			});
+			//tab.win.bottom = settings.tabHeight;
 		}
 
 		tab.win.visible = false;
@@ -87,10 +97,7 @@ function addTab(props) {
 			rootWindow.add(navGroup);
 
 			tab.win.__navGroup = navGroup;
-
-			tab.win.close = function() {
-				alert('here');
-			}
+			
 		}
 
 		tab.win.open();
@@ -124,6 +131,10 @@ function configure(args) {
 
 	if (!OS_IOS) {
 		settings.tabsAtBottom = args.tabsAtBottom;
+	}
+	
+	if (OS_ANDROID) {
+		settings.heavyWeightMode = args.heavyWeightMode;		
 	}
 
 	init();
