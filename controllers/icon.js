@@ -8,5 +8,5 @@ exports.setActive = function() {
 };
 
 exports.setInactive = function() {
-	$.icon.backgroundImage =  args.icon;
+	$.icon.backgroundImage = args.icon;
 };

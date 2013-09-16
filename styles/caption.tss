@@ -1,20 +1,18 @@
-
 "#caption" : {
 	text: "Caption",
 	font: {
 		fontSize: 10
 	},
-	bottom:4,
-	width:Ti.UI.SIZE,
-	height:Ti.UI.SIZE,
+	bottom: 4,
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE,
 	color: "#fff",
 	selectedColor: "#000"
-	
 }
 
 "#caption[platform=android]" : {
 	font: {
 		fontSize: 10
-	}	
+	}
 }
 
