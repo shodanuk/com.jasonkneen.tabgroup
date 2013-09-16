@@ -10,6 +10,9 @@ The idea was to come up with something that could "just work" on both iOS and An
 ![TabGroup](https://raw.github.com/jasonkneen/images/master/tabGroup/android.png)
 ![TabGroup](https://raw.github.com/jasonkneen/images/master/tabGroup/android2.png)
 
+## Latest
+* Added flag for "lightWeightWindowMode" which if false works as previously but if true supports the leftNavButton property of the window (or creates a default back button on Android).
+
 ## Features
 * Easy to add to existing XML
 * Works with existing Window definitions
@@ -17,8 +20,8 @@ The idea was to come up with something that could "just work" on both iOS and An
 * Works on Android, iOS
 
 ### Wishlist
-* ability to open lightweight sub-windows in Android, keep TabGroup visible
-* simulate left, right buttons and iOS style title bar in Android
+* DONE as of 16th Sep 2013! - ability to open lightweight sub-windows in Android, keep TabGroup visible
+* DONE (for leftnav) as of 16th Sep 2013 simulate left, right buttons and iOS style title bar in Android
 * replace iOS titlebar with custom version with support for left, right buttons
 * hide / show tabs dynamically, refresh
 * custom, oversized tab buttons e.g. middle button

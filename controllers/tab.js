@@ -104,7 +104,7 @@ function open(subWindow) {
 
 	} else if (OS_ANDROID) {
 
-		if (args.settings.heavyWeightMode) {
+		if (!args.settings.lightWeightMode) {
 			subWindow.modal = subWindow.modal || false;
 		} else {
 
@@ -130,8 +130,8 @@ function open(subWindow) {
 			subWindow.leftNavButton.applyProperties({
 				top : subWindow.leftNavButton.top || 5,
 				left : subWindow.leftNavButton.left || 5,
-				height: subWindow.leftNavButton.height || 38,
-				width: subWindow.leftNavButton.width || 75
+				height : subWindow.leftNavButton.height || 38,
+				width : subWindow.leftNavButton.width || 75
 			});
 
 			subWindow.leftNavButton.addEventListener("click", function() {
@@ -158,7 +158,7 @@ function close(subWindow) {
 
 	} else if (OS_ANDROID) {
 
-		if (!args.settings.heavyWeightMode) {
+		if (args.settings.lightWeightMode) {
 
 			subWins.pop();
 
@@ -166,7 +166,7 @@ function close(subWindow) {
 
 		subWindow.close();
 
-		subWindow = null;		
+		subWindow = null;
 
 	} else {
 

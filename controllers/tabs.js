@@ -10,7 +10,7 @@ var settings = {
 	tabsAtBottom : true,
 	tabGroup : {},
 	tabs : {},
-	heavyWeightMode : false
+	lightWeightMode : false
 };
 
 // initialise the tabGroup Window
@@ -134,7 +134,7 @@ function configure(args) {
 	}
 	
 	if (OS_ANDROID) {
-		settings.heavyWeightMode = args.heavyWeightMode;		
+		settings.lightWeightMode = args.lightWeightMode;		
 	}
 
 	init();
