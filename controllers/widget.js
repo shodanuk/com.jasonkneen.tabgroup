@@ -10,6 +10,6 @@ exports.setActiveTab = tabs.setActiveTab;
 
 // properties
 Object.defineProperty($, "activeTab", {
-    get : tabs.getActiveTab,
-    set : tabs.setActiveTab
+	get : tabs.getActiveTab,
+	set : tabs.setActiveTab
 });
