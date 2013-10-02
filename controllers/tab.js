@@ -115,7 +115,32 @@ function open(subWindow) {
 
 	if (OS_IOS) {
 
+		if(args.win.navBarHidden){		// assume custom navBar
+
+			if (!subWindow.leftNavButton) {
+				subWindow.leftNavButton = Ti.UI.createButton({
+					height : 38,
+					title : "back"
+				});
+
+				subWindow.leftNavButton.applyProperties({
+					top : subWindow.leftNavButton.top || 5,
+					left : subWindow.leftNavButton.left || 5,
+					height : subWindow.leftNavButton.height || 38,
+					width : subWindow.leftNavButton.width || 75
+				});
+
+				subWindow.add(subWindow.leftNavButton);
+			}
+
+			subWindow.leftNavButton.addEventListener("click", function(e) {
+				close(subWindow);
+			});
+			subWindow.leftNavButton.visible = true;
+		}
+
 		args.win.__navGroup.openWindow(subWindow);
+
 
 	} else if (OS_ANDROID) {
 
@@ -123,46 +148,51 @@ function open(subWindow) {
 			subWindow.modal = subWindow.modal || false;
 		} else {
 
-			if (args.settings.tabsAtBottom) {
-				subWindow.applyProperties({
-					top : 0,
-					bottom : args.settings.tabHeight
-				});
-			} else {
-				subWindow.applyProperties({
-					top : args.settings.tabHeight,
-					bottom : 0
-				});
-			}
-
 			if (!subWindow.leftNavButton) {
 				subWindow.leftNavButton = Ti.UI.createButton({
 					height : 38,
 					title : "back"
 				});
+
+				subWindow.leftNavButton.applyProperties({
+					top : subWindow.leftNavButton.top || 5,
+					left : subWindow.leftNavButton.left || 5,
+					height : subWindow.leftNavButton.height || 38,
+					width : subWindow.leftNavButton.width || 75
+				});
+
+				subWindow.add(subWindow.leftNavButton);
 			}
 
-			subWindow.leftNavButton.applyProperties({
-				top : subWindow.leftNavButton.top || 5,
-				left : subWindow.leftNavButton.left || 5,
-				height : subWindow.leftNavButton.height || 38,
-				width : subWindow.leftNavButton.width || 75
-			});
-
+		    // Back Button
 			subWindow.leftNavButton.addEventListener("click", function() {
 				close(subWindow);
 			});
 		    subWindow.addEventListener('androidback', function() {
 		        close(subWindow);
 		    });
+			subWindow.leftNavButton.visible = true;
 
-			subWindow.add(subWindow.leftNavButton);
 
 			subWins.push(subWindow);
 
+			// window transition
+
+			var currentWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
+			var distance = Ti.Platform.displayCaps.platformWidth - 30;
+
+        	subWindow.opacity = 0;
+        	// subWindow.left = distance;
+			subWindow.open();
+			subWindow.setLeft(distance);
+        	subWindow.opacity = 1;
+
+			Alloy.Globals.transitions.slideToLeft(currentWin, subWindow, {}, function(e){
+				// currentWin.hide();
+			});
 		}
 
-		subWindow.open();
+//		subWindow.open();
 
 	} else {
 		subWindow.open();
@@ -178,14 +208,24 @@ function close(subWindow) {
 	} else if (OS_ANDROID) {
 
 		if (args.settings.lightWeightMode) {
+			var currentWin = subWins[subWins.length-1];
+			var previousWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
+
+			var distance = Ti.Platform.displayCaps.platformWidth;
+
+			if(previousWin){
+				previousWin.left = -distance;
+				previousWin.show();
+			}
+			Alloy.Globals.transitions.slideToRight(currentWin, previousWin, {}, function(e){
+	            currentWin.close();
+			});
 
 			subWins.pop();
 
+		} else {
+			subWindow.close();
 		}
-
-		subWindow.close();
-
-		subWindow = null;
 
 	} else {
 
