@@ -3,9 +3,11 @@ var rootWindow = arguments[0] || {};
 var helpers = require(WPATH("helpers"));
 
 var navGroup, activeTab, tabGroupWindow, tabs = [];
+var isHidden = false;
 
 // defaults
 var settings = {
+	captions : true,				// display captions
 	tabHeight : OS_IOS ? 49 : 69,
 	tabsAtBottom : true,
 	tabGroup : {},
@@ -21,9 +23,12 @@ function init() {
 	rootWindow.visible = false;
 	rootWindow.open();
 
+	if(!settings.captions) 	settings.tabHeight -= 9;
+
 	var config = {
 		width : Ti.UI.FILL,
-		height : settings.tabHeight
+		height : settings.tabHeight,
+		backgroundColor : 'blue'
 	};
 
 	if (!settings.tabsAtBottom) {
@@ -37,9 +42,20 @@ function init() {
 	// create our tab window to hold the tabs
 	tabGroupWindow = Ti.UI.createWindow(config);
 
+
+//  TODO  -  add tabs.close()  +  hook up back button to close tabs
+
+if(OS_ANDROID){
+    // Back Button
+    tabGroupWindow.addEventListener('androidback', function() {
+    	Ti.API.info('TO DO:  need to implement close tabs');
+        // $.tabGroup.close();
+    });
+}
+
+
 	// set top/bottom of root window
 	// and position of tabgroup
-
 }
 
 function addTab(props) {
@@ -52,7 +68,7 @@ function addTab(props) {
 		selectedFont : props.selectedFont || settings.tabs.selectedFont,
 		selectedColor : props.selectedColor || settings.tabs.selectedColor,
 		color : props.color || settings.tabs.color,
-		settings : settings	
+		settings : settings
 
 	}, props);
 
@@ -71,16 +87,18 @@ function addTab(props) {
 		tab.win = props.win;
 
 		if (!settings.tabsAtBottom) {
+			var extendTop = tab.win.extendEdges && _.contains(tab.win.extendEdges, Ti.UI.EXTEND_EDGE_TOP);
 			tab.win.applyProperties({
-				top : settings.tabHeight,
+				top : extendTop ? 0 : settings.tabHeight,
 				bottom : 0
 			});
 			//tab.win.top = settings.tabHeight;
 
 		} else {
+			var extendBottom = tab.win.extendEdges && _.contains(tab.win.extendEdges, Ti.UI.EXTEND_EDGE_BOTTOM);
 			tab.win.applyProperties({
 				top : 0,
-				bottom : settings.tabHeight
+				bottom : extendBottom ? 0 : settings.tabHeight
 			});
 			//tab.win.bottom = settings.tabHeight;
 		}
@@ -89,15 +107,13 @@ function addTab(props) {
 
 		if (OS_IOS) {
 
-			navGroup = Ti.UI.iPhone.createNavigationGroup({
+			navGroup = Ti.UI.iOS.createNavigationWindow({
 				window : tab.win,
 				visible : false
 			});
 
-			rootWindow.add(navGroup);
-
+			navGroup.open();
 			tab.win.__navGroup = navGroup;
-			
 		}
 
 		tab.win.open();
@@ -127,14 +143,15 @@ function addTab(props) {
 function configure(args) {
 
 	// copy over the tabs settings
+	settings.captions = args.captions;
 	settings.tabs = args.tabs || {};
 
 	if (!OS_IOS) {
 		settings.tabsAtBottom = args.tabsAtBottom;
 	}
-	
+
 	if (OS_ANDROID) {
-		settings.lightWeightMode = args.lightWeightMode;		
+		settings.lightWeightMode = args.lightWeightMode;
 	}
 
 	init();
@@ -208,6 +225,20 @@ function setActiveTab(t) {
 	}
 }
 
+function hidden() {
+	return isHidden;
+}
+
+function hide(animate) {
+	isHidden = true;
+	animate ? tabGroupWindow.animate({ bottom: -tabGroupWindow.height, duration: 70, curve: Ti.UI.ANIMATION_CURVE_EASE_IN }) : tabGroupWindow.bottom = -tabGroupWindow.height;
+}
+
+function show(animate) {
+	isHidden = false;
+	animate ? tabGroupWindow.animate({ bottom: 0, duration: 80, curve: Ti.UI.ANIMATION_CURVE_EASE_OUT }) : tabGroupWindow.bottom = 0;
+}
+
 exports.configure = configure;
 exports.init = init;
 exports.open = open;
@@ -215,4 +246,6 @@ exports.refresh = refresh;
 exports.addTab = addTab;
 exports.getActiveTab = getActiveTab;
 exports.setActiveTab = setActiveTab;
-
+exports.hidden = hidden;
+exports.hide = hide;
+exports.show = show;

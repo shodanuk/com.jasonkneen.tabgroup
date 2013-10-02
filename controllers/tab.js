@@ -17,11 +17,12 @@ if (args.view) {
 
 	// create our icon and caption
 	var icon = Widget.createWidget(Widget.widgetId, "icon", args);
-	var caption = Widget.createWidget(Widget.widgetId, "caption", args);
-
-	// use default icon / caption
 	$.wrapper.add(icon.getView());
-	$.wrapper.add(caption.getView());
+
+	if(args.settings.captions){
+		var caption = Widget.createWidget(Widget.widgetId, "caption", args);
+		$.wrapper.add(caption.getView());
+	}
 
 	$.tab.applyProperties({
 		backgroundColor : args.backgroundColor || "transparent",
@@ -30,7 +31,7 @@ if (args.view) {
 
 }
 
-$.clickZone.addEventListener("click", function() {
+$.clickZone.addEventListener("touchstart", function() {
 	$.trigger("tab:click");
 });
 
@@ -41,7 +42,7 @@ function setActive() {
 		$.tab.backgroundColor = $.tab.backgroundSelectedColor || $.tab.backgroundColor;
 
 		icon.setActive();
-		caption.setActive();
+		if(args.settings.captions)	caption.setActive();
 
 	} else {
 
@@ -72,7 +73,7 @@ function setInactive() {
 		$.tab.backgroundColor = tabBackgroundColor;
 
 		icon.setInactive();
-		caption.setInactive();
+		if(args.settings.captions)	caption.setInactive();
 
 	} else {
 
@@ -98,9 +99,48 @@ function setInactive() {
 
 function open(subWindow) {
 
+	if (args.settings.tabsAtBottom) {
+		var extendBottom = subWindow.extendEdges && _.contains(subWindow.extendEdges, Ti.UI.EXTEND_EDGE_BOTTOM);
+		subWindow.applyProperties({
+			top : 0,
+			bottom : extendBottom ? 0 : args.settings.tabHeight
+		});
+	} else {
+		var extendTop = subWindow.extendEdges && _.contains(subWindow.extendEdges, Ti.UI.EXTEND_EDGE_TOP);
+		subWindow.applyProperties({
+			top : extendTop ? 0 : args.settings.tabHeight,
+			bottom : 0
+		});
+	}
+
 	if (OS_IOS) {
 
-		args.win.__navGroup.open(subWindow);
+		if(args.win.navBarHidden){		// assume custom navBar
+
+			if (!subWindow.leftNavButton) {
+				subWindow.leftNavButton = Ti.UI.createButton({
+					height : 38,
+					title : "back"
+				});
+
+				subWindow.leftNavButton.applyProperties({
+					top : subWindow.leftNavButton.top || 5,
+					left : subWindow.leftNavButton.left || 5,
+					height : subWindow.leftNavButton.height || 38,
+					width : subWindow.leftNavButton.width || 75
+				});
+
+				subWindow.add(subWindow.leftNavButton);
+			}
+
+			subWindow.leftNavButton.addEventListener("click", function(e) {
+				close(subWindow);
+			});
+			subWindow.leftNavButton.visible = true;
+		}
+
+		args.win.__navGroup.openWindow(subWindow);
+
 
 	} else if (OS_ANDROID) {
 
@@ -108,43 +148,51 @@ function open(subWindow) {
 			subWindow.modal = subWindow.modal || false;
 		} else {
 
-			if (args.settings.tabsAtBottom) {
-				subWindow.applyProperties({
-					top : 0,
-					bottom : args.settings.tabHeight
-				});
-			} else {
-				subWindow.applyProperties({
-					top : args.settings.tabHeight,
-					bottom : 0
-				});
-			}
-
 			if (!subWindow.leftNavButton) {
 				subWindow.leftNavButton = Ti.UI.createButton({
 					height : 38,
 					title : "back"
 				});
+
+				subWindow.leftNavButton.applyProperties({
+					top : subWindow.leftNavButton.top || 5,
+					left : subWindow.leftNavButton.left || 5,
+					height : subWindow.leftNavButton.height || 38,
+					width : subWindow.leftNavButton.width || 75
+				});
+
+				subWindow.add(subWindow.leftNavButton);
 			}
 
-			subWindow.leftNavButton.applyProperties({
-				top : subWindow.leftNavButton.top || 5,
-				left : subWindow.leftNavButton.left || 5,
-				height : subWindow.leftNavButton.height || 38,
-				width : subWindow.leftNavButton.width || 75
-			});
-
+		    // Back Button
 			subWindow.leftNavButton.addEventListener("click", function() {
 				close(subWindow);
 			});
+		    subWindow.addEventListener('androidback', function() {
+		        close(subWindow);
+		    });
+			subWindow.leftNavButton.visible = true;
 
-			subWindow.add(subWindow.leftNavButton);
 
 			subWins.push(subWindow);
 
+			// window transition
+
+			var currentWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
+			var distance = Ti.Platform.displayCaps.platformWidth - 30;
+
+        	subWindow.opacity = 0;
+        	// subWindow.left = distance;
+			subWindow.open();
+			subWindow.setLeft(distance);
+        	subWindow.opacity = 1;
+
+			Alloy.Globals.transitions.slideToLeft(currentWin, subWindow, {}, function(e){
+				// currentWin.hide();
+			});
 		}
 
-		subWindow.open();
+//		subWindow.open();
 
 	} else {
 		subWindow.open();
@@ -152,21 +200,32 @@ function open(subWindow) {
 }
 
 function close(subWindow) {
+
 	if (OS_IOS) {
 
-		args.win.__navGroup.close(subWindow);
+		args.win.__navGroup.closeWindow(subWindow);
 
 	} else if (OS_ANDROID) {
 
 		if (args.settings.lightWeightMode) {
+			var currentWin = subWins[subWins.length-1];
+			var previousWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
+
+			var distance = Ti.Platform.displayCaps.platformWidth;
+
+			if(previousWin){
+				previousWin.left = -distance;
+				previousWin.show();
+			}
+			Alloy.Globals.transitions.slideToRight(currentWin, previousWin, {}, function(e){
+	            currentWin.close();
+			});
 
 			subWins.pop();
 
+		} else {
+			subWindow.close();
 		}
-
-		subWindow.close();
-
-		subWindow = null;
 
 	} else {
 

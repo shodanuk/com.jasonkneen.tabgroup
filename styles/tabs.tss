@@ -2,7 +2,7 @@
 	bottom: 0,
 	height: Ti.UI.FILL,
 	width: Ti.UI.FILL,
-	backgroundColor: "transparent",
+	backgroundColor: "#f8111111",
+	tintColor: 'green',
 	layout: "horizontal"
 }
-

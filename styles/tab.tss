@@ -3,7 +3,6 @@
 }
 
 ".tab" : {
-	backgroundColor: "#000",
+	backgroundColor: "transparent",
 	backgroundSelectedColor: "#fff"
 }
-
