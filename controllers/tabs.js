@@ -3,6 +3,7 @@ var rootWindow = arguments[0] || {};
 var helpers = require(WPATH("helpers"));
 
 var navGroup, activeTab, tabGroupWindow, tabs = [];
+var isHidden = false;
 
 // defaults
 var settings = {
@@ -212,6 +213,20 @@ function setActiveTab(t) {
 	}
 }
 
+function hidden() {
+	return isHidden;
+}
+
+function hide(animate) {
+	isHidden = true;
+	animate ? tabGroupWindow.animate({ bottom: -tabGroupWindow.height, duration: 70, curve: Ti.UI.ANIMATION_CURVE_EASE_IN }) : tabGroupWindow.bottom = -tabGroupWindow.height;
+}
+
+function show(animate) {
+	isHidden = false;
+	animate ? tabGroupWindow.animate({ bottom: 0, duration: 80, curve: Ti.UI.ANIMATION_CURVE_EASE_OUT }) : tabGroupWindow.bottom = 0;
+}
+
 exports.configure = configure;
 exports.init = init;
 exports.open = open;
@@ -219,4 +234,6 @@ exports.refresh = refresh;
 exports.addTab = addTab;
 exports.getActiveTab = getActiveTab;
 exports.setActiveTab = setActiveTab;
-
+exports.hidden = hidden;
+exports.hide = hide;
+exports.show = show;
