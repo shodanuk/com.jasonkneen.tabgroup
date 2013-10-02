@@ -27,7 +27,8 @@ function init() {
 
 	var config = {
 		width : Ti.UI.FILL,
-		height : settings.tabHeight
+		height : settings.tabHeight,
+		backgroundColor : 'blue'
 	};
 
 	if (!settings.tabsAtBottom) {
@@ -67,7 +68,7 @@ function addTab(props) {
 		selectedFont : props.selectedFont || settings.tabs.selectedFont,
 		selectedColor : props.selectedColor || settings.tabs.selectedColor,
 		color : props.color || settings.tabs.color,
-		settings : settings	
+		settings : settings
 
 	}, props);
 
@@ -106,15 +107,13 @@ function addTab(props) {
 
 		if (OS_IOS) {
 
-			navGroup = Ti.UI.iPhone.createNavigationGroup({
+			navGroup = Ti.UI.iOS.createNavigationWindow({
 				window : tab.win,
 				visible : false
 			});
 
-			rootWindow.add(navGroup);
-
+			navGroup.open();
 			tab.win.__navGroup = navGroup;
-			
 		}
 
 		tab.win.open();

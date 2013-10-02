@@ -115,7 +115,7 @@ function open(subWindow) {
 
 	if (OS_IOS) {
 
-		args.win.__navGroup.open(subWindow);
+		args.win.__navGroup.openWindow(subWindow);
 
 	} else if (OS_ANDROID) {
 
@@ -170,9 +170,10 @@ function open(subWindow) {
 }
 
 function close(subWindow) {
+
 	if (OS_IOS) {
 
-		args.win.__navGroup.close(subWindow);
+		args.win.__navGroup.closeWindow(subWindow);
 
 	} else if (OS_ANDROID) {
 
