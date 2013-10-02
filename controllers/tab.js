@@ -138,6 +138,9 @@ function open(subWindow) {
 			subWindow.leftNavButton.addEventListener("click", function() {
 				close(subWindow);
 			});
+		    subWindow.addEventListener('androidback', function() {
+		        close(subWindow);
+		    });
 
 			subWindow.add(subWindow.leftNavButton);
 

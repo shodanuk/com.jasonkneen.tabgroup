@@ -41,9 +41,20 @@ function init() {
 	// create our tab window to hold the tabs
 	tabGroupWindow = Ti.UI.createWindow(config);
 
+
+//  TODO  -  add tabs.close()  +  hook up back button to close tabs
+
+if(OS_ANDROID){
+    // Back Button
+    tabGroupWindow.addEventListener('androidback', function() {
+    	Ti.API.info('TO DO:  need to implement close tabs');
+        // $.tabGroup.close();
+    });
+}
+
+
 	// set top/bottom of root window
 	// and position of tabgroup
-
 }
 
 function addTab(props) {
@@ -137,9 +148,8 @@ function configure(args) {
 	if (!OS_IOS) {
 		settings.tabsAtBottom = args.tabsAtBottom;
 	}
-	
 	if (OS_ANDROID) {
-		settings.lightWeightMode = args.lightWeightMode;		
+		settings.lightWeightMode = args.lightWeightMode;
 	}
 
 	init();
