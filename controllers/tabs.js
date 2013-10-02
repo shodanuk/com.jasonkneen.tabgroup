@@ -6,6 +6,7 @@ var navGroup, activeTab, tabGroupWindow, tabs = [];
 
 // defaults
 var settings = {
+	captions : true,				// display captions
 	tabHeight : OS_IOS ? 49 : 69,
 	tabsAtBottom : true,
 	tabGroup : {},
@@ -20,6 +21,8 @@ function init() {
 	// before opening it
 	rootWindow.visible = false;
 	rootWindow.open();
+
+	if(!settings.captions) 	settings.tabHeight -= 9;
 
 	var config = {
 		width : Ti.UI.FILL,
@@ -127,6 +130,7 @@ function addTab(props) {
 function configure(args) {
 
 	// copy over the tabs settings
+	settings.captions = args.captions;
 	settings.tabs = args.tabs || {};
 
 	if (!OS_IOS) {

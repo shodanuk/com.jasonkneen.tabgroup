@@ -17,11 +17,12 @@ if (args.view) {
 
 	// create our icon and caption
 	var icon = Widget.createWidget(Widget.widgetId, "icon", args);
-	var caption = Widget.createWidget(Widget.widgetId, "caption", args);
-
-	// use default icon / caption
 	$.wrapper.add(icon.getView());
-	$.wrapper.add(caption.getView());
+
+	if(args.settings.captions){
+		var caption = Widget.createWidget(Widget.widgetId, "caption", args);
+		$.wrapper.add(caption.getView());
+	}
 
 	$.tab.applyProperties({
 		backgroundColor : args.backgroundColor || "transparent",
@@ -41,7 +42,7 @@ function setActive() {
 		$.tab.backgroundColor = $.tab.backgroundSelectedColor || $.tab.backgroundColor;
 
 		icon.setActive();
-		caption.setActive();
+		if(args.settings.captions)	caption.setActive();
 
 	} else {
 
@@ -72,7 +73,7 @@ function setInactive() {
 		$.tab.backgroundColor = tabBackgroundColor;
 
 		icon.setInactive();
-		caption.setInactive();
+		if(args.settings.captions)	caption.setInactive();
 
 	} else {
 
