@@ -31,7 +31,7 @@ if (args.view) {
 
 }
 
-$.clickZone.addEventListener("click", function() {
+$.clickZone.addEventListener("touchstart", function() {
 	$.trigger("tab:click");
 });
 
