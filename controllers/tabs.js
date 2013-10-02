@@ -86,16 +86,18 @@ function addTab(props) {
 		tab.win = props.win;
 
 		if (!settings.tabsAtBottom) {
+			var extendTop = tab.win.extendEdges && _.contains(tab.win.extendEdges, Ti.UI.EXTEND_EDGE_TOP);
 			tab.win.applyProperties({
-				top : settings.tabHeight,
+				top : extendTop ? 0 : settings.tabHeight,
 				bottom : 0
 			});
 			//tab.win.top = settings.tabHeight;
 
 		} else {
+			var extendBottom = tab.win.extendEdges && _.contains(tab.win.extendEdges, Ti.UI.EXTEND_EDGE_BOTTOM);
 			tab.win.applyProperties({
 				top : 0,
-				bottom : settings.tabHeight
+				bottom : extendBottom ? 0 : settings.tabHeight
 			});
 			//tab.win.bottom = settings.tabHeight;
 		}
@@ -148,6 +150,7 @@ function configure(args) {
 	if (!OS_IOS) {
 		settings.tabsAtBottom = args.tabsAtBottom;
 	}
+
 	if (OS_ANDROID) {
 		settings.lightWeightMode = args.lightWeightMode;
 	}
