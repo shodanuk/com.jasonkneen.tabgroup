@@ -143,7 +143,9 @@ function addTab(props) {
 function configure(args) {
 
 	// copy over the tabs settings
-	settings.captions = args.captions;
+    if ("undefined" !== typeof args.captions) {
+        settings.captions = args.captions;
+    }
 	settings.tabs = args.tabs || {};
 
 	if (!OS_IOS) {
