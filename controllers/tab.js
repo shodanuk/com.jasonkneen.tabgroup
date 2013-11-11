@@ -42,7 +42,10 @@ function setActive() {
 		$.tab.backgroundColor = $.tab.backgroundSelectedColor || $.tab.backgroundColor;
 
 		icon.setActive();
-		if(args.settings.captions)	caption.setActive();
+		
+		if (args.settings.captions) {
+			caption.setActive();
+		}
 
 	} else {
 
@@ -73,7 +76,10 @@ function setInactive() {
 		$.tab.backgroundColor = tabBackgroundColor;
 
 		icon.setInactive();
-		if(args.settings.captions)	caption.setInactive();
+		
+		if (args.settings.captions) {
+			caption.setInactive();
+		}
 
 	} else {
 
