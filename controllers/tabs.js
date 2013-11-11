@@ -233,11 +233,13 @@ function hidden() {
 
 function hide(animate) {
 	isHidden = true;
+	rootWindow.hide();
 	animate ? tabGroupWindow.animate({ bottom: -tabGroupWindow.height, duration: 70, curve: Ti.UI.ANIMATION_CURVE_EASE_IN }) : tabGroupWindow.bottom = -tabGroupWindow.height;
 }
 
 function show(animate) {
 	isHidden = false;
+	rootWindow.show();
 	animate ? tabGroupWindow.animate({ bottom: 0, duration: 80, curve: Ti.UI.ANIMATION_CURVE_EASE_OUT }) : tabGroupWindow.bottom = 0;
 }
 
