@@ -173,31 +173,18 @@ function open(subWindow) {
 			subWindow.leftNavButton.addEventListener("click", function() {
 				close(subWindow);
 			});
-		    subWindow.addEventListener('androidback', function() {
-		        close(subWindow);
-		    });
-			subWindow.leftNavButton.visible = true;
 
+			subWindow.addEventListener('androidback', function() {
+				close(subWindow);
+			});
+
+			subWindow.leftNavButton.visible = true;
 
 			subWins.push(subWindow);
 
-			// window transition
-
-			var currentWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
-			var distance = Ti.Platform.displayCaps.platformWidth - 30;
-
-        	subWindow.opacity = 0;
-        	// subWindow.left = distance;
 			subWindow.open();
-			subWindow.setLeft(distance);
-        	subWindow.opacity = 1;
 
-			Alloy.Globals.transitions.slideToLeft(currentWin, subWindow, {}, function(e){
-				// currentWin.hide();
-			});
 		}
-
-//		subWindow.open();
 
 	} else {
 		subWindow.open();
@@ -213,19 +200,9 @@ function close(subWindow) {
 	} else if (OS_ANDROID) {
 
 		if (args.settings.lightWeightMode) {
-			var currentWin = subWins[subWins.length-1];
-			var previousWin = (subWins.length === 1) ? null : subWins[subWins.length-2];
+			var currentWin = subWins[subWins.length - 1];
 
-			var distance = Ti.Platform.displayCaps.platformWidth;
-
-			if(previousWin){
-				previousWin.left = -distance;
-				previousWin.show();
-			}
-			Alloy.Globals.transitions.slideToRight(currentWin, previousWin, {}, function(e){
-	            currentWin.close();
-			});
-
+			currentWin.close();
 			subWins.pop();
 
 		} else {
