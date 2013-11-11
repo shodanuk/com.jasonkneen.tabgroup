@@ -19,7 +19,7 @@ if (args.view) {
 	var icon = Widget.createWidget(Widget.widgetId, "icon", args);
 	$.wrapper.add(icon.getView());
 
-	if(args.settings.captions){
+	if (args.settings.captions) {
 		var caption = Widget.createWidget(Widget.widgetId, "caption", args);
 		$.wrapper.add(caption.getView());
 	}
@@ -121,7 +121,7 @@ function open(subWindow) {
 
 	if (OS_IOS) {
 
-		if(args.win.navBarHidden){		// assume custom navBar
+		if (args.win.navBarHidden) {// assume custom navBar
 
 			if (!subWindow.leftNavButton) {
 				subWindow.leftNavButton = Ti.UI.createButton({
@@ -147,7 +147,6 @@ function open(subWindow) {
 
 		args.win.__navGroup.openWindow(subWindow);
 
-
 	} else if (OS_ANDROID) {
 
 		if (!args.settings.lightWeightMode) {
@@ -170,7 +169,7 @@ function open(subWindow) {
 				subWindow.add(subWindow.leftNavButton);
 			}
 
-		    // Back Button
+			// Back Button
 			subWindow.leftNavButton.addEventListener("click", function() {
 				close(subWindow);
 			});
