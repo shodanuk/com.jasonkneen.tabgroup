@@ -22,8 +22,6 @@ The idea was to come up with something that could "just work" on both iOS and An
 * Works on Android, iOS
 
 ### Wishlist
-* DONE as of 16th Sep 2013! - ability to open lightweight sub-windows in Android, keep TabGroup visible
-* DONE (for leftnav) as of 16th Sep 2013 simulate left, right buttons and iOS style title bar in Android
 * replace iOS titlebar with custom version with support for left, right buttons
 * hide / show tabs dynamically, refresh
 * custom, oversized tab buttons e.g. middle button
