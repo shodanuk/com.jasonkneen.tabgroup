@@ -151,6 +151,7 @@ function open(subWindow) {
 
 		if (!args.settings.lightWeightMode) {
 			subWindow.modal = subWindow.modal || false;
+			subWindow.open();
 		} else {
 
 			if (!subWindow.leftNavButton) {
