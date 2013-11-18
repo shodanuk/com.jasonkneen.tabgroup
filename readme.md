@@ -137,6 +137,12 @@ Methods & Properties:-
 * .activeTab.open(win) - open a subwindow
 
 * .activeTab.close(win) - close a subwindow
+ 
+Events :-
+
+.on("tabs:focus) - will pass you the tab that has focus
+
+(also each time you switch tabs, the window in the tab will get focus / blur events)
 
 ## License
 
