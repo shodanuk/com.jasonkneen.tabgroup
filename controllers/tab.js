@@ -57,6 +57,7 @@ function setActive() {
 	if (args.win) {
 
 		args.win.show();
+		args.win.fireEvent("focus");
 
 		if (args.win.__navGroup) {
 			args.win.__navGroup.show();
@@ -91,6 +92,7 @@ function setInactive() {
 	if (args.win) {
 
 		args.win.hide();
+		args.win.fireEvent("blur");
 
 		if (args.win.__navGroup) {
 			args.win.__navGroup.hide();
