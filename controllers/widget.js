@@ -19,3 +19,8 @@ Object.defineProperty($, "activeTab", {
 Object.defineProperty($, "hidden", {
 	get : tabs.hidden,
 });
+
+// events
+tabs.on('tabs:focus', function(e){
+   $.trigger('focus', e); 
+});
