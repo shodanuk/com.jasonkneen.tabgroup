@@ -12,7 +12,7 @@ The idea was to come up with something that could "just work" on both iOS and An
 
 ## Latest
 * Merged some pull requests to squash some bugs and add focus events
-* Avoid using navBarHidden in Android Windows or ANY settings that may cause your tab windows to go heavyweight as you'll get unexpected behavoir.
+* Avoid using navBarHidden in Android Windows or ANY settings that may cause your tab windows to go heavyweight as you'll get unexpected behavoir. If you need to hide the title bar in Android, use the platform theme file to do that.
 
 
 ## Features
