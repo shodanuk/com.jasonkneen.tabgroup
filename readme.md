@@ -11,7 +11,9 @@ The idea was to come up with something that could "just work" on both iOS and An
 ![TabGroup](https://raw.github.com/jasonkneen/images/master/tabGroup/android2.png)
 
 ## Latest
-* Added flag for "lightWeightWindowMode" which if false works as previously but if true supports the leftNavButton property of the window (or creates a default back button on Android).
+* Merged some pull requests to squash some bugs and add focus events
+* Avoid using navBarHidden in Android Windows or ANY settings that may cause your tab windows to go heavyweight as you'll get unexpected behavoir.
+
 
 ## Features
 * Easy to add to existing XML
