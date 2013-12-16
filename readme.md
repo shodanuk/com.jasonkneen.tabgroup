@@ -140,7 +140,7 @@ Methods & Properties:-
  
 Events :-
 
-.on("tabs:focus) - will pass you the tab that has focus
+.on("focus") - will pass you the tab that has focus
 
 (also each time you switch tabs, the window in the tab will get focus / blur events)
 
