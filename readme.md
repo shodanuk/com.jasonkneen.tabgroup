@@ -71,7 +71,7 @@ in the TiApp.xml
 * Configure the widget from the controller .js file (current properties supported shown here)
 
 ```js
-$.tabGroup.configure({
+$.tabGroup.set({
 	backgroundColor : "#000",
 	//backgroundImage : "PATH",
 
@@ -129,7 +129,7 @@ $.tabGroup.open();
 
 Methods & Properties:-
 
-* .configure(dictionary) - set's up properties for tabGroup, default tabs
+* .set(dictionary) - sets up properties for tabGroup, default tabs
 
 * .addTab(dictionary) - adds a new tab
 
